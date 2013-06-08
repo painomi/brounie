@@ -21,7 +21,8 @@ module BrounieBot
 			msg= NKF::nkf('-wxm0Z0', msg).force_encoding('UTF-8')
 			if command= Commands.instance.parse(prefix, msg)
 				message= command.do
-			elsif message= DiceRoll.parse(msg)
+			elsif dice_roll= DiceRoll::parse(msg)
+				message= dice_roll.roll
 			else
 				return
 			end

@@ -13,7 +13,6 @@ class Die
 			raise ArgumentError, @face.to_s
 		end
 		@result
-		srand
 	end
 	
 	attr_reader :result, :face
@@ -78,16 +77,15 @@ class Dice
 end
 
 class DiceRoll
-	def initialize
-		@said= ''
-		@fix= 0
-		@dice= Array.new
+	def initialize(said='', fix=0, dice=Array.new)
+		@said= said
+		@fix= fix
+		@dice= dice
 	end
 	
-	def self.parse(msg)
-		@said= msg
-		said= NKF.nkf('-Ze',@said)
-		@fix= 0
+	def self.parse(said)
+		said= NKF.nkf('-Ze', said)
+		fix= 0
 		
 		said += ' '
 		n= 0
@@ -101,21 +99,25 @@ class DiceRoll
 		while said =~ /([+-]?\s?\d+)([\s\:\/\.\!\?\&\+\-])/
 			said= $'
 			said= $2+ said if $2
-			@fix+= $1.sub(/\s/, '').to_i
+			fix+= $1.sub(/\s/, '').to_i
 		end
-		@dice= Dice.new(Array.new(n,Die.new))
+		dice= Dice.new(Array.new(n,Die.new))
 		
-		if @fix==0 and @dice.size==0
+		if fix==0 and dice.size==0
 			return nil
 		else
-			@dice.roll
-			str= @said
-			str+= ' => '
-			str+= @fix.to_s+ '+'
-			str+= @dice.results.map{|f| '['+f.to_s+']'}.join('')
-			str+= ' = '+ (@fix+ @dice.result).to_s
-			return str
+			return DiceRoll.new(said, fix, dice)
 		end
+	end
+	
+	def roll
+		@dice.roll
+		str= @said
+		str+= ' => '
+		str+= @fix.to_s+ '+'
+		str+= @dice.results.map{|f| '['+f.to_s+']'}.join('')
+		str+= ' = '+ (@fix+ @dice.result).to_s
+		return str
 	end
 end
 

@@ -1,21 +1,22 @@
 # -*- coding: Windows-31J -*-
 
-require '../lib/dice.rb'
+require '../lib/brounie/dice.rb'
 
-describe Roll, '判定' do
-	it 'new した時は、2D6の判定とする' do
-		r= Roll.new
-		r.should be_kind_of(Roll)
-		r.to_s.should =~ /\+2D6 =/
+class DiceRoll
+	attr_reader :said, :fix, :dice
+end
+
+describe DiceRoll do
+	it '解釈できない文字列には nilを返す' do
+		DiceRoll::parse('ロールでない文字列').should== nil
 	end
-	
-	context '文字列をパースできること' do
-		it '解釈できない文字列には nilを返す' do
-			Roll::parse('ロールでない文字列').should== nil
-		end
 		
-		it '解釈できる場合は Rollクラスを返す' do
-			Roll::parse('ベースが２Ｄ＋７、アイテムで＋２０、クリティカルで＋２Ｄ').should be_kind_of(Roll)
+	context 'パースしてDiceRollを生成' do
+		it 'ダイスロールだけの文字列' do
+			srand(0)
+			d=DiceRoll::parse('2D+4')
+			d.should be_a_kind_of(DiceRoll)
+			d.roll.should =~ /4\+\[5\]\[6\]/
 		end
 	end
 end

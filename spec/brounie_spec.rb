@@ -25,7 +25,7 @@ end
 
 describe Brounie,"少女展爛会システム" do
 	before(:all) do
-		@sess = Session.new
+		@sess = Session.load('default.yaml')
 	end
 	
 	context "提示部" do
@@ -352,6 +352,7 @@ describe Brounie,"少女展爛会システム" do
 			end
 			
 			it "result 判定結果を表示できること" do
+				pending("srandを使ってspecを書き直す予定"){
 				@chg.say('純真：7+3d')
 				dice= Array.new(3,Die.new)
 				dice= stub(:results).and_return([3, 1, 6])
@@ -359,13 +360,16 @@ describe Brounie,"少女展爛会システム" do
 				@chg.dice= dice
 				@chg.roll
 				@chg.result.should match(/純真：7\+3d \=\> 7\+\[3\]\[1\]\[6\] \= (17)/)
+				}
 			end
 			
 			it "roll([n]) 振り直しができること" do
+				pending("srandを使ってspecを書き直す予定"){
 				@chg.say('純真：7+3d')
 				@chg.roll
 				@chg.roll(2)
 				@chg.result.should match(/純真：7\+3d \=\> 7\+\[3\]\[5\]\[6\] \= (21)/)
+				}
 			end
 		end
 		
@@ -438,6 +442,10 @@ describe Brounie,"少女展爛会システム" do
 				@ode_all3.conclusion.to_s.should == "オーデ [HF7>3 RM3 LN3 CT0](9)"
 			end
 		end
+	end
+	
+	context "指摘・要望" do
+		it "[不具合] Excelが無い環境だとSession.newできない"
 	end
 end
 
