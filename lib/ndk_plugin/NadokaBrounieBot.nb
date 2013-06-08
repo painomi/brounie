@@ -1,0 +1,5 @@
+require '../lib/brounie.rb'
+
+class NadokaBrounieBot < Nadoka::NDK_Bot
+	include BrounieBot::NadokaBot
+end

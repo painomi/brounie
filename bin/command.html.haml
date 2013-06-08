@@ -1,0 +1,5 @@
+- require '../lib/brounie.rb'
+- BrounieBot::Commands.instance.all.each do |c, com|
+	%h2 #{com}
+	%p 
+		#{BrounieBot::Commands.instance.help[c]}
