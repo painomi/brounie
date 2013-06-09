@@ -77,17 +77,29 @@ class Dice
 end
 
 class DiceRoll
-	def initialize(said='', fix=0, dice=Array.new)
-		@said= said
-		@fix= fix
-		@dice= dice
+	def initialize(said='', fix=0, dice=Array.new, d66=0)
+		@said = said
+		@fix  = fix
+		@dice = dice
+		@d66  = d66
 	end
 	
 	def self.parse(said)
+		msg= said
 		said= NKF.nkf('-Ze', said)
 		fix= 0
-		
+		d66= 0
 		said += ' '
+		
+		pre= ''
+		while said =~ /(\D)?[dD]66/
+			d66+= 1
+			pre+= $`
+			pre+= $1 if $1
+			said= $'
+		end
+		said= pre+ said
+		
 		n= 0
 		pre= ''
 		while said =~ /(\d{0,2})[dD][6\D]/
@@ -96,27 +108,40 @@ class DiceRoll
 			said= $'
 		end
 		said= pre+ said
-		while said =~ /([+-]?\s?\d+)([\s\:\/\.\!\?\&\+\-])/
+		
+		while said =~ /([+-]?\s?\d+)([\D])/
 			said= $'
 			said= $2+ said if $2
 			fix+= $1.sub(/\s/, '').to_i
 		end
-		dice= Dice.new(Array.new(n,Die.new))
+		dice= Array.new(n, Die.new)
 		
-		if fix==0 and dice.size==0
+		if fix==0 and dice.size==0 and d66==0
 			return nil
 		else
-			return DiceRoll.new(said, fix, dice)
+			return DiceRoll.new(msg, fix, dice, d66)
 		end
 	end
 	
 	def roll
-		@dice.roll
-		str= @said
-		str+= ' => '
-		str+= @fix.to_s+ '+'
-		str+= @dice.results.map{|f| '['+f.to_s+']'}.join('')
-		str+= ' = '+ (@fix+ @dice.result).to_s
+		str= @said + ' => '
+		
+		if @d66 > 0
+			d= []
+			d << Die.new.cast
+			d << Die.new.cast
+			d.sort
+			str+= ' ['+ d.join('')+ '] '
+		end
+		
+		if @fix > 0 or @dice.size > 0
+			result= []
+			@dice.each{|d| result<< d.cast}
+			str+= @fix.to_s+ '+'
+			str+= result.map{|r| '['+ r.to_s+ ']'}.join('')
+			str+= ' = '+ (@fix+ result.inject{|sum, r| sum+ r }).to_s
+		end
+		
 		return str
 	end
 end
