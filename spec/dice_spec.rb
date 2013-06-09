@@ -19,14 +19,14 @@ describe DiceRoll do
 		it 'ダイスロールだけの文字列' do
 			d=DiceRoll::parse('2D+4')
 			d.should be_a_kind_of(DiceRoll)
-			d.roll.should =~ /4\+\[5\]\[6\]/
+			d.roll.should =~ /4\+\[6\]\[5\]/
 			d.roll.should =~ /2D\+4/
 		end
 		
 		it '文字列中にダイスロールが混じっているケース' do
 			d=DiceRoll::parse('通常で2d、マスタリーで1d、武器の攻撃力が11でスキルで+4です')
 			d.should be_a_kind_of(DiceRoll)
-			d.roll.should =~ /15\+\[5\]\[6\]\[1\]/
+			d.roll.should =~ /15\+\[6\]\[5\]\[1\]/
 			d.roll.should =~ /通常で2d、マスタリーで1d、武器の攻撃力が11でスキルで\+4です/
 		end
 	end

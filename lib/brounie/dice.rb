@@ -137,6 +137,7 @@ class DiceRoll
 		if @fix > 0 or @dice.size > 0
 			result= []
 			@dice.each{|d| result<< d.cast}
+			result.sort!.reverse!
 			str+= @fix.to_s+ '+'
 			str+= result.map{|r| '['+ r.to_s+ ']'}.join('')
 			str+= ' = '+ (@fix+ result.inject{|sum, r| sum+ r }).to_s
