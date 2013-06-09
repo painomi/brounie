@@ -7,10 +7,16 @@ class DiceRoll
 end
 
 describe DiceRoll do
-	it '解釈できない文字列には nilを返す' do
-		DiceRoll::parse('ロールでない文字列').should== nil
-	end
+	context '解釈できない文字列には nilを返す' do
+		it '数字やダイス表現が含まれない文字列' do
+			DiceRoll::parse('こんにちは。').should== nil
+		end
 		
+		it '数字だけが含まれる文字列' do
+			DiceRoll::parse('5+5-10').should== nil
+		end
+	end
+	
 	context 'D6 x n のダイスロールができる' do
 		before do
 			srand(0)
