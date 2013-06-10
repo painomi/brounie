@@ -1,5 +1,3 @@
-# -*- coding: Windows-31J -*-
-
 require 'nkf'
 
 class ParseError < StandardError ; end
