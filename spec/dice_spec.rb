@@ -24,19 +24,21 @@ describe DiceRoll do
 		end
 		
 		it 'ダイスロールだけの文字列' do
-			d=DiceRoll::parse('2D+4')
+			s= '2D+4'
+			d=DiceRoll::parse(s)
 			expect(d).to be_an_instance_of(DiceRoll)
 			r= d.roll
-			expect(r).to match(/4\+\[6\]\[5\]/)
-			expect(r).to match(/2D\+4/)
+			expect(r).to include('4+[6][5]')
+			expect(r).to include(s)
 		end
 		
 		it '文字列中にダイスロールが混じっているケース' do
-			d=DiceRoll::parse('通常で2d、マスタリーで1d、武器の攻撃力が11でスキルで+4です')
+			s= '通常で2d、マスタリーで1d、武器の攻撃力が11でスキルで+4です'
+			d=DiceRoll::parse(s)
 			expect(d).to be_an_instance_of(DiceRoll)
 			r= d.roll
-			expect(r).to match(/15\+\[6\]\[5\]\[1\]/)
-			expect(r).to match(/通常で2d、マスタリーで1d、武器の攻撃力が11でスキルで\+4です/)
+			expect(r).to include('15+[6][5][1]')
+			expect(r).to include(s)
 		end
 	end
 	
@@ -46,11 +48,12 @@ describe DiceRoll do
 		end
 		
 		it 'D66だけ' do
-			d=DiceRoll::parse('D66')
+			s= 'D66'
+			d=DiceRoll::parse(s)
 			expect(d).to be_an_instance_of(DiceRoll)
 			r= d.roll
-			expect(r).to match(/\[56\]/)
-			expect(r).to match(/D66/)
+			expect(r).to include('[56]')
+			expect(r).to include(s)
 		end
 	end
 end
