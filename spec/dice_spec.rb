@@ -1,4 +1,5 @@
-# -*- coding: Windows-31J -*-
+ï»¿# -*- coding: UTF-8 -*-
+$stdout.set_encoding('Windows-31J')
 
 require '../lib/brounie/dice.rb'
 
@@ -7,46 +8,49 @@ class DiceRoll
 end
 
 describe DiceRoll do
-	context '‰ğß‚Å‚«‚È‚¢•¶š—ñ‚É‚Í nil‚ğ•Ô‚·' do
-		it '”š‚âƒ_ƒCƒX•\Œ»‚ªŠÜ‚Ü‚ê‚È‚¢•¶š—ñ' do
-			DiceRoll::parse('‚±‚ñ‚É‚¿‚ÍB').should== nil
+	context 'è§£é‡ˆã§ããªã„æ–‡å­—åˆ—ã«ã¯ nilã‚’è¿”ã™' do
+		it 'æ•°å­—ã‚„ãƒ€ã‚¤ã‚¹è¡¨ç¾ãŒå«ã¾ã‚Œãªã„æ–‡å­—åˆ—' do
+			expect(DiceRoll::parse('ã“ã‚“ã«ã¡ã¯ã€‚')).to be_false
 		end
 		
-		it '”š‚¾‚¯‚ªŠÜ‚Ü‚ê‚é•¶š—ñ' do
-			DiceRoll::parse('5+5-10').should== nil
+		it 'æ•°å­—ã ã‘ãŒå«ã¾ã‚Œã‚‹æ–‡å­—åˆ—' do
+			expect(DiceRoll::parse('5+5-10')).to be_false
 		end
 	end
 	
-	context 'D6 x n ‚Ìƒ_ƒCƒXƒ[ƒ‹‚ª‚Å‚«‚é' do
+	context 'D6 x n ã®ãƒ€ã‚¤ã‚¹ãƒ­ãƒ¼ãƒ«ãŒã§ãã‚‹' do
 		before do
 			srand(0)
 		end
 		
-		it 'ƒ_ƒCƒXƒ[ƒ‹‚¾‚¯‚Ì•¶š—ñ' do
+		it 'ãƒ€ã‚¤ã‚¹ãƒ­ãƒ¼ãƒ«ã ã‘ã®æ–‡å­—åˆ—' do
 			d=DiceRoll::parse('2D+4')
-			d.should be_a_kind_of(DiceRoll)
-			d.roll.should =~ /4\+\[6\]\[5\]/
-			d.roll.should =~ /2D\+4/
+			expect(d).to be_an_instance_of(DiceRoll)
+			r= d.roll
+			expect(r).to match(/4\+\[6\]\[5\]/)
+			expect(r).to match(/2D\+4/)
 		end
 		
-		it '•¶š—ñ’†‚Éƒ_ƒCƒXƒ[ƒ‹‚ª¬‚¶‚Á‚Ä‚¢‚éƒP[ƒX' do
-			d=DiceRoll::parse('’Êí‚Å2dAƒ}ƒXƒ^ƒŠ[‚Å1dA•Ší‚ÌUŒ‚—Í‚ª11‚ÅƒXƒLƒ‹‚Å+4‚Å‚·')
-			d.should be_a_kind_of(DiceRoll)
-			d.roll.should =~ /15\+\[6\]\[5\]\[1\]/
-			d.roll.should =~ /’Êí‚Å2dAƒ}ƒXƒ^ƒŠ[‚Å1dA•Ší‚ÌUŒ‚—Í‚ª11‚ÅƒXƒLƒ‹‚Å\+4‚Å‚·/
+		it 'æ–‡å­—åˆ—ä¸­ã«ãƒ€ã‚¤ã‚¹ãƒ­ãƒ¼ãƒ«ãŒæ··ã˜ã£ã¦ã„ã‚‹ã‚±ãƒ¼ã‚¹' do
+			d=DiceRoll::parse('é€šå¸¸ã§2dã€ãƒã‚¹ã‚¿ãƒªãƒ¼ã§1dã€æ­¦å™¨ã®æ”»æ’ƒåŠ›ãŒ11ã§ã‚¹ã‚­ãƒ«ã§+4ã§ã™')
+			expect(d).to be_an_instance_of(DiceRoll)
+			r= d.roll
+			expect(r).to match(/15\+\[6\]\[5\]\[1\]/)
+			expect(r).to match(/é€šå¸¸ã§2dã€ãƒã‚¹ã‚¿ãƒªãƒ¼ã§1dã€æ­¦å™¨ã®æ”»æ’ƒåŠ›ãŒ11ã§ã‚¹ã‚­ãƒ«ã§\+4ã§ã™/)
 		end
 	end
 	
-	context 'D66 ‚Ìƒ_ƒCƒXƒ[ƒ‹‚ª‚Å‚«‚é' do
+	context 'D66 ã®ãƒ€ã‚¤ã‚¹ãƒ­ãƒ¼ãƒ«ãŒã§ãã‚‹' do
 		before do
 			srand(0)
 		end
 		
-		it 'D66‚¾‚¯' do
+		it 'D66ã ã‘' do
 			d=DiceRoll::parse('D66')
-			d.should be_a_kind_of(DiceRoll)
-			d.roll.should =~ /\[56\]/
-			d.roll.should =~ /D66/
+			expect(d).to be_an_instance_of(DiceRoll)
+			r= d.roll
+			expect(r).to match(/\[56\]/)
+			expect(r).to match(/D66/)
 		end
 	end
 end
