@@ -1,5 +1,4 @@
-@ECHO OFF
-d:
-cd "C:\Users\painomi.ringo\Documents\sakura\www\glexb\brounie\bin"
+@echo off
+cd /d %~dp0
 nadoka --rc ../brounie.rc
 pause
