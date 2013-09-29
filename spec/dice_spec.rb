@@ -8,48 +8,52 @@ class DiceRoll
 end
 
 describe DiceRoll do
-	subject { DiceRoll::parse(string) }
-
 	context '解釈できない文字列には nilを返す' do
-		context '数字やダイス表現が含まれない文字列' do
-			let(:string) { 'こんにちは。' }
-			it { expect(subject).to be_nil }
+		it '数字やダイス表現が含まれない文字列' do
+			expect(DiceRoll::parse('こんにちは。')).to be_false
 		end
 		
-		context '数字だけが含まれる文字列' do
-			let(:string) { '5+5-10' }
-			it { expect(subject).to be_nil }
+		it '数字だけが含まれる文字列' do
+			expect(DiceRoll::parse('5+5-10')).to be_false
 		end
 	end
-
-	describe 'ダイスがロール出来る' do
-		before { srand(0) }
-		shared_examples_for 'dice roll' do
-			it { expect(subject).to be_an_instance_of(DiceRoll) }
-			its(:roll) { expect(subject).to include(result) }
-			its(:roll) { expect(subject).to include(string) }
-		end
-
-		context 'D6 x n のダイス' do
-			context 'ダイスロールだけの文字列' do
-				let(:string) { '2D+4' }
-				let(:result) { '4+[6][5]' }
-				it_should_behave_like 'dice roll'
-			end
-			
-			context '文字列中にダイスロールが混じっているケース' do
-				let(:string) { '通常で2d、マスタリーで1d、武器の攻撃力が11でスキルで+4です' }
-				let(:result) { '15+[6][5][1]' }
-				it_should_behave_like 'dice roll'
-			end
+	
+	context 'D6 x n のダイスロールができる' do
+		before do
+			srand(0)
 		end
 		
-		context 'D66 のダイス' do
-			context 'D66だけ' do
-				let(:string) { 'D66' }
-				let(:result) { '[56]' }
-				it_should_behave_like 'dice roll'
-			end
+		it 'ダイスロールだけの文字列' do
+			s= '2D+4'
+			d=DiceRoll::parse(s)
+			expect(d).to be_an_instance_of(DiceRoll)
+			r= d.roll
+			expect(r).to include('4+[6][5]')
+			expect(r).to include(s)
+		end
+		
+		it '文字列中にダイスロールが混じっているケース' do
+			s= '通常で2d、マスタリーで1d、武器の攻撃力が11でスキルで+4です'
+			d=DiceRoll::parse(s)
+			expect(d).to be_an_instance_of(DiceRoll)
+			r= d.roll
+			expect(r).to include('15+[6][5][1]')
+			expect(r).to include(s)
+		end
+	end
+	
+	context 'D66 のダイスロールができる' do
+		before do
+			srand(0)
+		end
+		
+		it 'D66だけ' do
+			s= 'D66'
+			d=DiceRoll::parse(s)
+			expect(d).to be_an_instance_of(DiceRoll)
+			r= d.roll
+			expect(r).to include('[56]')
+			expect(r).to include(s)
 		end
 	end
 end
