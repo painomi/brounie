@@ -115,7 +115,7 @@ class DiceRoll
 		dice= Array.new(n, Die.new)
 		
 		if fix==0 and dice.size==0 and d66==0
-			return nil
+			raise ParseError
 		else
 			return DiceRoll.new(msg, fix, dice, d66)
 		end

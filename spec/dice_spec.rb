@@ -10,11 +10,11 @@ end
 describe DiceRoll do
 	context '解釈できない文字列には nilを返す' do
 		it '数字やダイス表現が含まれない文字列' do
-			expect(DiceRoll::parse('こんにちは。')).to be_false
+			lambda{DiceRoll::parse('こんにちは。')}.should raise_error
 		end
 		
 		it '数字だけが含まれる文字列' do
-			expect(DiceRoll::parse('5+5-10')).to be_false
+			lambda{DiceRoll::parse('5+5-10')}.should raise_error
 		end
 	end
 	

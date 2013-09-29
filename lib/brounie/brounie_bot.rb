@@ -18,18 +18,20 @@ module BrounieBot
 		end
 		
 		def on_privmsg(prefix, ch, msg)
-			msg= NKF::nkf('-wxm0Z0', msg).force_encoding('UTF-8')
-			if command= Commands.instance.parse(prefix, msg)
-				message= command.do
-			elsif dice_roll= DiceRoll::parse(msg)
-				message= dice_roll.roll
-			else
-				return
-			end
-			message= NKF::nkf('-wm', message).force_encoding('ASCII-8BIT')
-			message.each_line do |line|
-				msg= line.strip
-				send_notice(ch, msg)
+			begin
+				msg= NKF::nkf('-wxm0Z0', msg).force_encoding('UTF-8')
+				if command= Commands.instance.parse(prefix, msg)
+					message= command.do
+				else
+					message= DiceRoll::parse(msg).roll
+				end
+				message= NKF::nkf('-wm', message).force_encoding('ASCII-8BIT')
+				message.each_line do |line|
+					msg= line.strip
+					send_notice(ch, msg)
+				end
+			rescue StandardError
+				return nil
 			end
 		end
 	end
